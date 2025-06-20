@@ -402,18 +402,34 @@
   const form = e.target;
   const emailInput = form.querySelector("input[type='email']");
   const email = emailInput.value.trim();
+  const btn = document.getElementById("notifyBtn");
 
+  // Check last submission time from localStorage
+  const lastSubmitTime = localStorage.getItem("lastEmailSubmitTime");
+  const now = Date.now();
+
+  if (lastSubmitTime && now - parseInt(lastSubmitTime) < 60000) {
+    e.preventDefault();
+    alert("Please wait at least 1 minute before submitting again.");
+    return;
+  }
+
+  // Save current timestamp
+  localStorage.setItem("lastEmailSubmitTime", now.toString());
+
+  // Continue with submission
   if (email !== "") {
-    const btn = document.getElementById("notifyBtn");
     btn.textContent = "Thank You!";
     btn.disabled = true;
     btn.style.background = "linear-gradient(90deg, #10b981, #34d399)";
-    
-    // Let browser handle submission naturally — do NOT preventDefault or use form.submit()
-    // Just clear the input AFTER the form submission is triggered
+
+    // Let form submit naturally
     setTimeout(() => {
       emailInput.value = "";
-    }, 1000);
+      btn.disabled = false;
+      btn.textContent = "Notify Me";
+      btn.style.background = "linear-gradient(90deg, var(--primary), var(--secondary))";
+    }, 3000); // Reset the button after 3 seconds (optional UX)
   }
 }
 </script>
