@@ -4,16 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hack2Rank - Coming Soon</title>
-  <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"
-/>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
     :root {
+      --primary: #60a5fa;
+      --primary-light: #93c5fd;
+      --secondary: #c084fc;
+      --dark: #f1f5f9;
+      --light: #1e293b;
+      --gray: #94a3b8;
+      --light-gray: #0f172a;
+      --green: #34d399;
+    }
+
+    body.light-mode {
       --primary: #2563eb;
       --primary-light: #3b82f6;
       --secondary: #7c3aed;
@@ -31,8 +38,8 @@
     }
 
     body {
-      background-color: var(--dark);
-      color: var(--light);
+      background-color: var(--light);
+      color: var(--dark);
       font-family: 'Inter', sans-serif;
       height: 100vh;
       overflow: hidden;
@@ -60,7 +67,6 @@
       left: 20px;
       z-index: 1000;
       font-size: 1.5rem;
-      font-family: 'Inter', sans-serif;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -75,6 +81,67 @@
     .h2r {
       color: #fefefe;
       font-weight: 500;
+    }
+
+    body.light-mode .h2r {
+    color: #000000; /* in light mode: black */
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--gray);
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "🌙";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--light);
+      border-radius: 50%;
+      transition: 0.4s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    input:checked + .slider {
+      background-color: var(--green);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+      content: "☀️";
     }
 
     .container {
@@ -95,7 +162,7 @@
       font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      color: var(--dark);
+      color: #000000;
       position: relative;
       display: inline-block;
     }
@@ -163,12 +230,10 @@
 
     .description {
       font-size: 1.1rem;
-      line-height: 1.6;
       margin-bottom: 2rem;
       color: var(--gray);
       max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: auto;
     }
 
     .notify-form {
@@ -186,14 +251,7 @@
       padding: 0.9rem 1.2rem;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      font-family: 'Inter', sans-serif;
       font-size: 1rem;
-    }
-
-    .email-input:focus {
-      outline: none;
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
     .notify-btn {
@@ -201,24 +259,11 @@
       border: none;
       color: var(--light);
       padding: 0.9rem 2rem;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-      white-space: nowrap;
-    }
-
-    .notify-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
-    }
-
-    .notify-btn:active {
-      transform: translateY(0);
-      opacity: 0.9;
     }
 
     .social-links {
@@ -239,7 +284,6 @@
       color: var(--gray);
       font-size: 1.3rem;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       text-decoration: none;
     }
 
@@ -248,77 +292,15 @@
       color: #fff;
     }
 
-    .social-link:nth-child(1):hover {
-      background-color: #0077b5; /* LinkedIn */
-    }
-
+    .social-link:nth-child(1):hover { background-color: #0077b5; }
     .social-link:nth-child(2):hover {
-      background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); /* Instagram */
+      background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
     }
-
-    .social-link:nth-child(3):hover {
-      background-color: #ea4335; /* Gmail */
-    }
+    .social-link:nth-child(3):hover { background-color: #ea4335; }
 
     @media (max-width: 768px) {
-      .logo {
-        font-size: 2.5rem;
-      }
-
-      .tagline {
-        font-size: 1.1rem;
-      }
-
-      .countdown {
-        gap: 0.5rem;
-      }
-
-      .countdown-item {
-        min-width: 70px;
-        padding: 1rem 0.5rem;
-      }
-
-      .countdown-value {
-        font-size: 1.8rem;
-      }
-
-      .countdown-label {
-        font-size: 0.7rem;
-      }
-
-      .notify-form {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .email-input, .notify-btn {
-        width: 100%;
-      }
-      .bottom-credit {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-        text-align: center;
-        font-size: 0.85rem;
-        color: var(--gray);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.2rem;
-        margin-top: 3rem;
-        }
-
-        .bottom-credit .socials {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        }
-
-        .bottom-credit .founder {
-        font-family: 'Bungee Shade', cursive;
-        font-size: 1.5rem;
-        color: var(--light);
-        }
+      .logo { font-size: 2.5rem; }
+      .tagline { font-size: 1.1rem; }
     }
   </style>
 </head>
@@ -327,10 +309,17 @@
     <span class="l1">L1</span> <span class="h2r">hack2rank</span>
   </div>
 
+  <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" id="themeToggle" onchange="toggleTheme()" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
   <div class="bg-pattern"></div>
 
   <div class="container">
-    <h1 class="logo" id="logo">HACK2RANK</h1>
+    <h1 class="logo">HACK2RANK</h1>
     <p class="tagline">For <span class="highlight">Learners</span>, <span class="highlight">Practitioners</span>, and <span class="highlight">Professionals</span></p>
 
     <div class="countdown">
@@ -344,94 +333,106 @@
       Hack2Rank is launching soon! A platform designed to Learn, Practice and Showcase real cybersecurity skills. Join our waitlist to be notified when we go live.
     </p>
 
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfWoXcotVrRKAOjySvn06vjtNjDWK_3b6tLXUVeyT3VN-bK5A/formResponse" 
-      method="POST" 
-      target="hidden_iframe" 
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfWoXcotVrRKAOjySvn06vjtNjDWK_3b6tLXUVeyT3VN-bK5A/formResponse"
+      method="POST"
+      target="hidden_iframe"
       class="notify-form"
       onsubmit="showThankYou(event)">
-    <input type="email" name="entry.953419049" class="email-input" placeholder="Enter your email address" required>
-    <button type="submit" class="notify-btn" id="notifyBtn">Notify Me</button>
+      <input type="email" name="entry.953419049" class="email-input" placeholder="Enter your email address" required>
+      <button type="submit" class="notify-btn" id="notifyBtn">Notify Me</button>
     </form>
     <iframe name="hidden_iframe" style="display:none;"></iframe>
-    
-
 
     <div class="social-links">
-      <a href="https://www.linkedin.com/company/hack2rank" target="_blank" class="social-link" title="LinkedIn">
-        <i class="fab fa-linkedin-in"></i>
-      </a>
-      <a href="https://www.instagram.com/hack2rank" target="_blank" class="social-link" title="Instagram">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hack2rankinfo@gmail.com" target="_blank" class="social-link" title="Email Us">
-        <i class="fas fa-envelope"></i>
-      </a>
+      <a href="https://www.linkedin.com/company/hack2rank" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://www.instagram.com/hack2rank" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+      <a href="mailto:hack2rankinfo@gmail.com" target="_blank" class="social-link"><i class="fas fa-envelope"></i></a>
     </div>
   </div>
 
   <script>
-  const launchDate = new Date("2025-09-15T12:00:00");
-  const countdownFunction = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = launchDate - now;
+    const launchDate = new Date("2025-09-15T12:00:00");
+    const countdownFunction = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = launchDate - now;
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    document.getElementById("days").textContent = days.toString().padStart(2, '0');
-    document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-    document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-    document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+      document.getElementById("days").textContent = days.toString().padStart(2, '0');
+      document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
 
-    if (distance < 0) {
-      clearInterval(countdownFunction);
-      document.getElementById("days").textContent = "00";
-      document.getElementById("hours").textContent = "00";
-      document.getElementById("minutes").textContent = "00";
-      document.getElementById("seconds").textContent = "00";
-      document.querySelector(".description").textContent = "Hack2Rank is now live! Visit our main website to get started.";
-      const btn = document.querySelector(".notify-btn");
-      btn.textContent = "Visit Now";
-      btn.onclick = () => window.location.href = "https://hack2rank.com";
+      if (distance < 0) {
+        clearInterval(countdownFunction);
+        document.querySelector(".description").textContent = "Hack2Rank is now live! Visit our main website.";
+        const btn = document.querySelector(".notify-btn");
+        btn.textContent = "Visit Now";
+        btn.onclick = () => window.location.href = "https://hack2rank.com";
+      }
+    }, 1000);
+
+    function showThankYou(e) {
+      const form = e.target;
+      const emailInput = form.querySelector("input[type='email']");
+      const email = emailInput.value.trim();
+      const btn = document.getElementById("notifyBtn");
+
+      const lastSubmitTime = localStorage.getItem("lastEmailSubmitTime");
+      const now = Date.now();
+
+      if (lastSubmitTime && now - parseInt(lastSubmitTime) < 60000) {
+        e.preventDefault();
+        alert("Please wait at least 1 minute before submitting again.");
+        return;
+      }
+
+      localStorage.setItem("lastEmailSubmitTime", now.toString());
+
+      if (email !== "") {
+        btn.textContent = "Thank You!";
+        btn.disabled = true;
+        btn.style.background = "linear-gradient(90deg, #10b981, #34d399)";
+        setTimeout(() => {
+          emailInput.value = "";
+          btn.disabled = false;
+          btn.textContent = "Notify Me";
+          btn.style.background = "linear-gradient(90deg, var(--primary), var(--secondary))";
+        }, 3000);
+      }
     }
-  }, 1000);
 
-  function showThankYou(e) {
-  const form = e.target;
-  const emailInput = form.querySelector("input[type='email']");
-  const email = emailInput.value.trim();
-  const btn = document.getElementById("notifyBtn");
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+      const isLight = document.body.classList.contains("light-mode");
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+      document.getElementById("themeToggle").checked = isLight;
+    }
 
-  // Check last submission time from localStorage
-  const lastSubmitTime = localStorage.getItem("lastEmailSubmitTime");
-  const now = Date.now();
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        document.getElementById("themeToggle").checked = true;
+      }
+    });
 
-  if (lastSubmitTime && now - parseInt(lastSubmitTime) < 60000) {
-    e.preventDefault();
-    alert("Please wait at least 1 minute before submitting again.");
-    return;
-  }
-
-  // Save current timestamp
-  localStorage.setItem("lastEmailSubmitTime", now.toString());
-
-  // Continue with submission
-  if (email !== "") {
-    btn.textContent = "Thank You!";
-    btn.disabled = true;
-    btn.style.background = "linear-gradient(90deg, #10b981, #34d399)";
-
-    // Let form submit naturally
-    setTimeout(() => {
-      emailInput.value = "";
-      btn.disabled = false;
-      btn.textContent = "Notify Me";
-      btn.style.background = "linear-gradient(90deg, var(--primary), var(--secondary))";
-    }, 3000); // Reset the button after 3 seconds (optional UX)
-  }
-}
-</script>
+    // Disable right-click, F12, DevTools, View Source
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      const key = e.key.toLowerCase();
+      if (
+        key === "f12" ||
+        (e.ctrlKey && key === "u") ||
+        (e.ctrlKey && e.shiftKey && (key === "i" || key === "j"))
+      ) {
+        e.preventDefault();
+        alert("Action blocked for security reasons.");
+      }
+    });
+  </script>
 </body>
 </html>
