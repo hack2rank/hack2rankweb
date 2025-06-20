@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hack2Rank - Coming Soon</title>
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/css/all.min.css"
+/>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --secondary: #7c3aed;
+      --dark: #1e293b;
+      --light: #ffffff;
+      --gray: #64748b;
+      --light-gray: #f1f5f9;
+      --green: #10b981;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .bg-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: var(--light-gray);
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 20%);
+      z-index: -1;
+    }
+
+    .top-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      font-size: 1.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .l1 {
+      color: #10b981;
+      font-weight: 900;
+    }
+
+    .h2r {
+      color: #fefefe;
+      font-weight: 500;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 800px;
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin: 1rem;
+    }
+
+    .logo {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+    }
+
+    .tagline {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .highlight {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 1.5rem 1rem;
+      min-width: 90px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .countdown-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .countdown-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .countdown-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: var(--gray);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .notify-form {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      max-width: 500px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .email-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+    }
+
+    .email-input:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .notify-btn {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border: none;
+      color: var(--light);
+      padding: 0.9rem 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+      white-space: nowrap;
+    }
+
+    .notify-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+    }
+
+    .notify-btn:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-gray);
+      color: var(--gray);
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      transform: scale(1.15);
+      color: #fff;
+    }
+
+    .social-link:nth-child(1):hover {
+      background-color: #0077b5; /* LinkedIn */
+    }
+
+    .social-link:nth-child(2):hover {
+      background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); /* Instagram */
+    }
+
+    .social-link:nth-child(3):hover {
+      background-color: #ea4335; /* Gmail */
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        font-size: 2.5rem;
+      }
+
+      .tagline {
+        font-size: 1.1rem;
+      }
+
+      .countdown {
+        gap: 0.5rem;
+      }
+
+      .countdown-item {
+        min-width: 70px;
+        padding: 1rem 0.5rem;
+      }
+
+      .countdown-value {
+        font-size: 1.8rem;
+      }
+
+      .countdown-label {
+        font-size: 0.7rem;
+      }
+
+      .notify-form {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .email-input, .notify-btn {
+        width: 100%;
+      }
+      .bottom-credit {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--gray);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+        margin-top: 3rem;
+        }
+
+        .bottom-credit .socials {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        }
+
+        .bottom-credit .founder {
+        font-family: 'Bungee Shade', cursive;
+        font-size: 1.5rem;
+        color: var(--light);
+        }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-logo">
+    <span class="l1">L1</span> <span class="h2r">hack2rank</span>
+  </div>
+
+  <div class="bg-pattern"></div>
+
+  <div class="container">
+    <h1 class="logo" id="logo">HACK2RANK</h1>
+    <p class="tagline">For <span class="highlight">Learners</span>, <span class="highlight">Practitioners</span>, and <span class="highlight">Professionals</span></p>
+
+    <div class="countdown">
+      <div class="countdown-item"><div class="countdown-value" id="days">00</div><div class="countdown-label">Days</div></div>
+      <div class="countdown-item"><div class="countdown-value" id="hours">00</div><div class="countdown-label">Hours</div></div>
+      <div class="countdown-item"><div class="countdown-value" id="minutes">00</div><div class="countdown-label">Minutes</div></div>
+      <div class="countdown-item"><div class="countdown-value" id="seconds">00</div><div class="countdown-label">Seconds</div></div>
+    </div>
+
+    <p class="description">
+      Hack2Rank is launching soon! A platform designed to Learn, Practice and Showcase real cybersecurity skills. Join our waitlist to be notified when we go live.
+    </p>
+
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfWoXcotVrRKAOjySvn06vjtNjDWK_3b6tLXUVeyT3VN-bK5A/formResponse" 
+      method="POST" 
+      target="hidden_iframe" 
+      class="notify-form"
+      onsubmit="showThankYou(event)">
+    <input type="email" name="entry.953419049" class="email-input" placeholder="Enter your email address" required>
+    <button type="submit" class="notify-btn" id="notifyBtn">Notify Me</button>
+    </form>
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+    
+
+
+    <div class="social-links">
+      <a href="https://www.linkedin.com/company/hack2rank" target="_blank" class="social-link" title="LinkedIn">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+      <a href="https://www.instagram.com/hack2rank" target="_blank" class="social-link" title="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hack2rankinfo@gmail.com" target="_blank" class="social-link" title="Email Us">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </div>
+  </div>
+
+  <script>
+  const launchDate = new Date("2025-09-15T12:00:00");
+  const countdownFunction = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = launchDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("days").textContent = days.toString().padStart(2, '0');
+    document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+    document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+    document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+
+    if (distance < 0) {
+      clearInterval(countdownFunction);
+      document.getElementById("days").textContent = "00";
+      document.getElementById("hours").textContent = "00";
+      document.getElementById("minutes").textContent = "00";
+      document.getElementById("seconds").textContent = "00";
+      document.querySelector(".description").textContent = "Hack2Rank is now live! Visit our main website to get started.";
+      const btn = document.querySelector(".notify-btn");
+      btn.textContent = "Visit Now";
+      btn.onclick = () => window.location.href = "https://hack2rank.com";
+    }
+  }, 1000);
+
+  function showThankYou(e) {
+  const form = e.target;
+  const emailInput = form.querySelector("input[type='email']");
+  const email = emailInput.value.trim();
+
+  if (email !== "") {
+    const btn = document.getElementById("notifyBtn");
+    btn.textContent = "Thank You!";
+    btn.disabled = true;
+    btn.style.background = "linear-gradient(90deg, #10b981, #34d399)";
+    
+    // Let browser handle submission naturally — do NOT preventDefault or use form.submit()
+    // Just clear the input AFTER the form submission is triggered
+    setTimeout(() => {
+      emailInput.value = "";
+    }, 1000);
+  }
+}
+</script>
+</body>
+</html>
