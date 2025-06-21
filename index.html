@@ -346,93 +346,129 @@
     <div class="social-links">
       <a href="https://www.linkedin.com/company/hack2rank" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a>
       <a href="https://www.instagram.com/hack2rank" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
-      <a href="mailto:hack2rankinfo@gmail.com" target="_blank" class="social-link"><i class="fas fa-envelope"></i></a>
+      <a href="mailto:hack2rankinfo@gmail.com" class="social-link"><i class="fas fa-envelope"></i></a>
     </div>
   </div>
 
   <script>
-    const launchDate = new Date("2025-09-15T12:00:00");
-    const countdownFunction = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = launchDate - now;
+  const launchDate = new Date("2025-09-15T12:00:00");
+  const countdownFunction = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = launchDate - now;
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      document.getElementById("days").textContent = days.toString().padStart(2, '0');
-      document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-      document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-      document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+    document.getElementById("days").textContent = days.toString().padStart(2, '0');
+    document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+    document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+    document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
 
-      if (distance < 0) {
-        clearInterval(countdownFunction);
-        document.querySelector(".description").textContent = "Hack2Rank is now live! Visit our main website.";
-        const btn = document.querySelector(".notify-btn");
-        btn.textContent = "Visit Now";
-        btn.onclick = () => window.location.href = "https://hack2rank.com";
-      }
-    }, 1000);
+    if (distance < 0) {
+      clearInterval(countdownFunction);
+      document.querySelector(".description").textContent = "Hack2Rank is now live! Visit our main website.";
+      const btn = document.querySelector(".notify-btn");
+      btn.textContent = "Visit Now";
+      btn.onclick = () => window.location.href = "https://hack2rank.com";
+    }
+  }, 1000);
 
-    function showThankYou(e) {
-      const form = e.target;
-      const emailInput = form.querySelector("input[type='email']");
-      const email = emailInput.value.trim();
-      const btn = document.getElementById("notifyBtn");
+  async function validateEmailExistence(email) {
+    try {
+      const response = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=YOUR_API_KEY&email=${email}`);
+      const data = await response.json();
+      return data.deliverability === "DELIVERABLE";
+    } catch (err) {
+      console.error("Email validation failed:", err);
+      return false;
+    }
+  }
 
-      const lastSubmitTime = localStorage.getItem("lastEmailSubmitTime");
-      const now = Date.now();
+  async function showThankYou(e) {
+    e.preventDefault(); // prevent default Google Form submission
 
-      if (lastSubmitTime && now - parseInt(lastSubmitTime) < 60000) {
-        e.preventDefault();
-        alert("Please wait at least 1 minute before submitting again.");
-        return;
-      }
+    const form = e.target;
+    const emailInput = form.querySelector("input[type='email']");
+    const email = emailInput.value.trim();
+    const btn = document.getElementById("notifyBtn");
 
-      localStorage.setItem("lastEmailSubmitTime", now.toString());
+    const lastSubmitTime = localStorage.getItem("lastEmailSubmitTime");
+    const now = Date.now();
 
-      if (email !== "") {
-        btn.textContent = "Thank You!";
-        btn.disabled = true;
-        btn.style.background = "linear-gradient(90deg, #10b981, #34d399)";
-        setTimeout(() => {
-          emailInput.value = "";
-          btn.disabled = false;
-          btn.textContent = "Notify Me";
-          btn.style.background = "linear-gradient(90deg, var(--primary), var(--secondary))";
-        }, 3000);
-      }
+    if (lastSubmitTime && now - parseInt(lastSubmitTime) < 60000) {
+      alert("Please wait at least 1 minute before submitting again.");
+      return;
     }
 
-    function toggleTheme() {
-      document.body.classList.toggle("light-mode");
-      const isLight = document.body.classList.contains("light-mode");
-      localStorage.setItem("theme", isLight ? "light" : "dark");
-      document.getElementById("themeToggle").checked = isLight;
+    // Regex + disposable domain check
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const bannedDomains = ['tempmail.com', 'mailinator.com', '10minutemail.com', 'example.com'];
+    const domain = email.split('@')[1];
+
+    if (!emailPattern.test(email) || bannedDomains.includes(domain)) {
+      alert("Please enter a valid, non-disposable email address.");
+      return;
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        document.body.classList.add("light-mode");
-        document.getElementById("themeToggle").checked = true;
-      }
-    });
+    btn.textContent = "Validating...";
+    btn.disabled = true;
+
+    const isValid = await validateEmailExistence(email);
+    if (!isValid) {
+      alert("This email address doesn't appear to be real. Try another.");
+      btn.textContent = "Notify Me";
+      btn.disabled = false;
+      return;
+    }
+
+    // Passed all checks
+    localStorage.setItem("lastEmailSubmitTime", now.toString());
+    btn.textContent = "Thank You!";
+    btn.style.background = "linear-gradient(90deg, #10b981, #34d399)";
+    form.submit(); // continue with Google Form submission
+
+    setTimeout(() => {
+      emailInput.value = "";
+      btn.disabled = false;
+      btn.textContent = "Notify Me";
+      btn.style.background = "linear-gradient(90deg, var(--primary), var(--secondary))";
+    }, 3000);
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle("light-mode");
+    const isLight = document.body.classList.contains("light-mode");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+    document.getElementById("themeToggle").checked = isLight;
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      document.body.classList.add("light-mode");
+      document.getElementById("themeToggle").checked = true;
+    }
+  });
 
     // Disable right-click, F12, DevTools, View Source
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", e => {
-      const key = e.key.toLowerCase();
-      if (
-        key === "f12" ||
-        (e.ctrlKey && key === "u") ||
-        (e.ctrlKey && e.shiftKey && (key === "i" || key === "j"))
-      ) {
-        e.preventDefault();
-        alert("Action blocked for security reasons.");
-      }
-    });
-  </script>
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
+  document.addEventListener("keydown", e => {
+    const key = e.key.toLowerCase();
+    const isBlocked =
+      key === "f12" ||
+      (e.ctrlKey && key === "u") ||
+      (e.ctrlKey && e.shiftKey && (key === "i" || key === "j")) ||
+      (e.metaKey && key === "u"); // for macOS
+
+    if (isBlocked) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return false;
+    }
+  }, true);
+</script>
 </body>
 </html>
