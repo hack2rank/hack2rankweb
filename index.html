@@ -402,16 +402,41 @@
       return;
     }
 
-    // Regex + disposable domain check
+    // Improved email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const bannedDomains = ['tempmail.com', 'mailinator.com', '10minutemail.com', 'example.com'];
+    const bannedDomains = [
+      'tempmail.com', 'mailinator.com', '10minutemail.com', 'example.com',
+      'ggmail.com', 'gmal.com', 'gnail.com', 'yaho.com', 'yhoo.com', 'outlok.com'
+    ];
+
+    const typoDomains = {
+      'ggmail.com': 'gmail.com',
+      'gmal.com': 'gmail.com',
+      'gnail.com': 'gmail.com',
+      'yaho.com': 'yahoo.com',
+      'yhoo.com': 'yahoo.com',
+      'outlok.com': 'outlook.com'
+    };
+
     const domain = email.split('@')[1];
 
-    if (!emailPattern.test(email) || bannedDomains.includes(domain)) {
+    if (!emailPattern.test(email)) {
+      alert("Invalid email format.");
+      return;
+    }
+
+    if (bannedDomains.includes(domain)) {
       alert("Please enter a valid, non-disposable email address.");
       return;
     }
 
+    if (typoDomains[domain]) {
+      const suggestion = email.split('@')[0] + '@' + typoDomains[domain];
+      alert(`Did you mean: ${suggestion}? Please correct your email.`);
+      return;
+    }
+
+    // API validation
     btn.textContent = "Validating...";
     btn.disabled = true;
 
@@ -452,7 +477,7 @@
     }
   });
 
-    // Disable right-click, F12, DevTools, View Source
+  // Disable right-click, F12, DevTools, View Source
   document.addEventListener("contextmenu", e => e.preventDefault());
 
   document.addEventListener("keydown", e => {
